@@ -1,0 +1,216 @@
+/* You can add global styles to this file, and also import other style files */
+/* CSS Variables for themes */
+:root {
+    /* Light theme variables */
+    --bg-primary: #f7fafc;
+    --bg-secondary: #ffffff;
+    --bg-tertiary: #f8f9fa;
+    --text-primary: #2d3748;
+    --text-secondary: #4a5568;
+    --text-muted: #718096;
+    --border-color: #e2e8f0;
+    --border-light: #f7fafc;
+    --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.07);
+    --shadow-md: 0 8px 20px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.1);
+    
+    /* Form specific colors */
+    --form-label-color: #34495e;
+    --form-header-color: #2c3e50;
+    --placeholder-color: #a0aec0;
+    --input-focus-border: #3498db;
+    
+    /* Theme toggle specific */
+    --theme-toggle-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --theme-toggle-color: white;
+    --theme-toggle-border: transparent;
+    --theme-toggle-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    --theme-toggle-hover-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+  }
+  
+  .dark-theme {
+    /* Dark theme variables */
+    --bg-primary: #1a202c;
+    --bg-secondary: #2d3748;
+    --bg-tertiary: #4a5568;
+    --text-primary: #f7fafc;
+    --text-secondary: #e2e8f0;
+    --text-muted: #cbd5e0;
+    --border-color: #4a5568;
+    --border-light: #2d3748;
+    --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 8px 20px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.5);
+    
+    /* Form specific colors for dark theme */
+    --form-label-color: #e2e8f0;
+    --form-header-color: #f7fafc;
+    --placeholder-color: #718096;
+    --input-focus-border: #667eea;
+    
+    /* Theme toggle for dark mode */
+    --theme-toggle-bg: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+    --theme-toggle-color: #1a202c;
+    --theme-toggle-border: transparent;
+    --theme-toggle-shadow: 0 4px 12px rgba(255, 216, 155, 0.3);
+    --theme-toggle-hover-shadow: 0 8px 20px rgba(255, 216, 155, 0.4);
+  }
+  
+  /* Global styles using CSS variables */
+  body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    transition: background-color 0.3s ease, color 0.3s ease;
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  /* Universal text color updates */
+  * {
+    transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+  }
+  
+  /* Form elements styling */
+  .form-control {
+    background: var(--bg-secondary) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-primary) !important;
+  }
+  
+  .form-control:focus {
+    border-color: var(--input-focus-border) !important;
+  }
+  
+  .form-control::placeholder {
+    color: var(--placeholder-color) !important;
+  }
+  
+  /* Labels and headings */
+  label {
+    color: var(--form-label-color) !important;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--text-primary) !important;
+  }
+  
+  /* Table styling */
+  .table {
+    color: var(--text-primary) !important;
+  }
+  
+  .table th {
+    background: var(--bg-tertiary) !important;
+    color: var(--text-primary) !important;
+  }
+  
+  .table td {
+    border-color: var(--border-light) !important;
+    color: var(--text-primary) !important;
+  }
+  
+  /* Month group styling */
+  .month-group {
+    background: var(--bg-secondary) !important;
+    border-color: var(--border-color) !important;
+    box-shadow: var(--shadow-sm) !important;
+  }
+  
+  .month-header {
+    background: var(--bg-tertiary) !important;
+    border-color: var(--border-color) !important;
+  }
+  
+  .month-title {
+    color: var(--text-primary) !important;
+  }
+  
+  /* Form specific updates */
+  .leave-form {
+    background: var(--bg-secondary) !important;
+    border-color: var(--border-color) !important;
+    box-shadow: var(--shadow-lg) !important;
+  }
+  
+  .leave-form h2 {
+    color: var(--form-header-color) !important;
+  }
+  
+  .form-subtitle {
+    color: var(--text-secondary) !important;
+  }
+  
+  .date-helper {
+    color: var(--text-muted) !important;
+  }
+  
+  .section-header h4 {
+    color: var(--text-primary) !important;
+  }
+  
+  /* Empty state styling */
+  .empty-state {
+    background: var(--bg-secondary) !important;
+    box-shadow: var(--shadow-sm) !important;
+  }
+  
+  .empty-state p {
+    color: var(--text-muted) !important;
+  }
+  
+  .empty-state small {
+    color: var(--text-muted) !important;
+  }
+  
+  /* Select dropdown styling */
+  select.form-control {
+    background: var(--bg-secondary) !important;
+    color: var(--text-primary) !important;
+  }
+  
+  select.form-control option {
+    background: var(--bg-secondary) !important;
+    color: var(--text-primary) !important;
+  }
+  
+  /* Additional text elements */
+  .employee-name {
+    color: var(--text-primary) !important;
+  }
+  
+  .date-display {
+    color: var(--text-secondary) !important;
+  }
+  
+  .stat-text {
+    color: white !important;
+  }
+  
+  /* Paragraph and span elements */
+  p, span:not(.badge-icon):not(.stat-icon):not(.theme-icon):not(.label-icon):not(.month-icon):not(.empty-icon):not(.expand-icon span) {
+    color: var(--text-primary);
+  }
+  
+  .text-muted, .help-text {
+    color: var(--text-muted) !important;
+  }
+  
+  /* Custom scrollbar for webkit browsers */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: var(--bg-tertiary);
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+  }

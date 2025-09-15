@@ -1,0 +1,157 @@
+<p>leave-form works!</p>
+<!-- frontend/src/app/components/leave-form/leave-form.component.html -->
+<div class="leave-form-container">
+    <div class="leave-form">
+      <div class="form-header">
+        <h2>📝 Add Employee Leave</h2>
+        <p class="form-subtitle">Select employee, dates, leave type and add comments</p>
+      </div>
+      
+      <form (ngSubmit)="onSubmit()" #leaveForm="ngForm" class="leave-form-content">
+        <!-- Employee Selection -->
+        <div class="form-section">
+          <div class="form-group">
+            <label for="selectedEmployee">
+              <span class="label-icon">👤</span>
+              Employee Name *
+            </label>
+            <select 
+              id="selectedEmployee"
+              name="selectedEmployee"
+              [(ngModel)]="selectedEmployee"
+              required
+              class="form-control select-control">
+              <option value="" disabled>Choose an employee</option>
+              <option *ngFor="let employee of employees" [value]="employee">
+                {{ employee }}
+              </option>
+            </select>
+          </div>
+        </div>
+  
+        <!-- Leave Type Selection -->
+        <div class="form-section">
+          <div class="form-group">
+            <label for="selectedLeaveType">
+              <span class="label-icon">📋</span>
+              Leave Type *
+            </label>
+            <select 
+              id="selectedLeaveType"
+              name="selectedLeaveType"
+              [(ngModel)]="selectedLeaveType"
+              required
+              class="form-control select-control">
+              <option value="" disabled>Choose leave type</option>
+              <option *ngFor="let leaveType of leaveTypes" [value]="leaveType">
+                {{ leaveType }}
+              </option>
+            </select>
+          </div>
+        </div>
+  
+        <!-- Date Selection -->
+        <div class="form-section">
+          <div class="section-header">
+            <h4>📅 Select Leave Period</h4>
+            <p class="date-helper">You can select past, present, or future dates</p>
+          </div>
+          
+          <div class="date-inputs-container">
+            <div class="date-input-group">
+              <label for="startDate">From Date *</label>
+              <input 
+                type="date" 
+                id="startDate"
+                name="startDate"
+                [(ngModel)]="startDate"
+                (change)="onStartDateChange()"
+                required
+                class="form-control date-input">
+            </div>
+  
+            <div class="date-separator">
+              <div class="separator-line"></div>
+              <span class="separator-text">to</span>
+              <div class="separator-line"></div>
+            </div>
+  
+            <div class="date-input-group">
+              <label for="endDate">To Date *</label>
+              <input 
+                type="date" 
+                id="endDate"
+                name="endDate"
+                [(ngModel)]="endDate"
+                [min]="startDate"
+                required
+                class="form-control date-input"
+                [class.invalid]="!validateDates()">
+            </div>
+          </div>
+  
+          <!-- Date Info/Error Display -->
+          <div class="date-feedback">
+            <div class="date-info" *ngIf="startDate && endDate && validateDates()">
+              <span class="info-badge">
+                <span class="badge-icon">📊</span>
+                {{ selectedDaysCount }} day(s) selected
+                <span *ngIf="selectedLeaveType" class="leave-type-display">
+                  ({{ selectedLeaveType }})
+                </span>
+              </span>
+            </div>
+  
+            <div class="date-error" *ngIf="startDate && endDate && !validateDates()">
+              <span class="error-badge">
+                <span class="badge-icon">⚠️</span>
+                End date must be on or after start date
+              </span>
+            </div>
+  
+            <div class="past-date-notice" *ngIf="isPastDate()">
+              <span class="notice-badge">
+                <span class="badge-icon">📅</span>
+                Recording past leave dates
+              </span>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Comment Section -->
+        <div class="form-section">
+          <div class="form-group">
+            <label for="comment">
+              <span class="label-icon">💬</span>
+              Comment/Reason
+              <span class="optional-text">(Optional)</span>
+            </label>
+            <textarea 
+              id="comment"
+              name="comment"
+              [(ngModel)]="comment"
+              placeholder="Add any additional details or reason for leave..."
+              class="form-control comment-textarea"
+              rows="3"
+              maxlength="500"></textarea>
+            <div class="character-count">
+              <small>{{ comment.length }}/500 characters</small>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Submit Button -->
+        <div class="form-actions">
+          <button 
+            type="submit" 
+            class="btn-submit"
+            [disabled]="isSubmitting || leaveForm.invalid || !validateDates()">
+            <span class="btn-content">
+              <span class="btn-icon">{{ isSubmitting ? '⏳' : '✅' }}</span>
+              <span class="btn-text">{{ isSubmitting ? 'Adding Leave...' : 'Add Leave Record(s)' }}</span>
+            </span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>

@@ -1,0 +1,23 @@
+<div class="container">
+  <header>
+    <div class="header-content">
+      <h1>{{ title }}</h1>
+      <div class="header-controls">
+        <button class="chart-toggle-btn" (click)="toggleChart()">
+          {{ showChart ? '📊 Hide Charts' : '📈 Show Charts' }}
+        </button>
+        <app-theme-toggle></app-theme-toggle>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="left-panel">
+      <app-leave-form></app-leave-form>
+      <app-leave-chart *ngIf="showChart"></app-leave-chart>
+    </div>
+    <div class="right-panel">
+      <app-leave-table></app-leave-table>
+    </div>
+  </main>
+</div>

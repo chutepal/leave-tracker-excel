@@ -1,0 +1,199 @@
+<p>leave-table works!</p>
+<div class="leave-table">
+    <div class="table-header">
+      <h2>📊 Employee Leave Records</h2>
+      <div class="summary-stats" *ngIf="leaveRecords.length > 0">
+        <span class="stat-item">
+          <span class="stat-icon">📋</span>
+          <span class="stat-text">{{ filteredRecordsCount }}/{{ totalRecordsCount }} Records</span>
+        </span>
+        <span class="stat-item">
+          <span class="stat-icon">📅</span>
+          <span class="stat-text">{{ monthGroups.length }} Months</span>
+        </span>
+      </div>
+    </div>
+  
+    <!-- Date Filter Section -->
+    <div class="filter-section">
+      <div class="filter-header">
+        <h3>🔍 Filter Records</h3>
+        <button class="clear-filter-btn" (click)="clearFilter()" *ngIf="isFiltering">
+          ✖️ Clear Filter
+        </button>
+      </div>
+  
+      <div class="filter-controls">
+        <div class="date-range-filter">
+          <div class="filter-group">
+            <label for="fromDate">From Date:</label>
+            <input 
+              type="date" 
+              id="fromDate"
+              name="fromDate"
+              [(ngModel)]="fromDate"
+              (change)="applyDateFilter()"
+              class="filter-input">
+          </div>
+  
+          <div class="filter-separator">
+            <span>to</span>
+          </div>
+  
+          <div class="filter-group">
+            <label for="toDate">To Date:</label>
+            <input 
+              type="date" 
+              id="toDate"
+              name="toDate"
+              [(ngModel)]="toDate"
+              (change)="applyDateFilter()"
+              [class.invalid]="!isValidDateRange"
+              class="filter-input">
+          </div>
+        </div>
+  
+        <div class="quick-filters">
+          <button class="quick-filter-btn" (click)="setQuickFilter(7)">
+            Last 7 Days
+          </button>
+          <button class="quick-filter-btn" (click)="setQuickFilter(30)">
+            Last 30 Days
+          </button>
+          <button class="quick-filter-btn" (click)="setCurrentMonthFilter()">
+            Current Month
+          </button>
+        </div>
+      </div>
+  
+      <div class="filter-status" *ngIf="isFiltering">
+        <div class="status-badge" [class.no-results]="filteredRecordsCount === 0">
+          {{ filteredRecordsCount === 0 ? 'No records found for selected date range' : 
+             'Showing ' + filteredRecordsCount + ' of ' + totalRecordsCount + ' records' }}
+        </div>
+      </div>
+  
+      <div class="date-error" *ngIf="!isValidDateRange">
+        <span class="error-message">⚠️ From date cannot be after To date</span>
+      </div>
+    </div>
+    
+    <!-- Empty State -->
+    <div *ngIf="leaveRecords.length === 0" class="no-records">
+      <div class="empty-state">
+        <span class="empty-icon">📋</span>
+        <p>No leave records found</p>
+        <small>Add some records using the form above</small>
+      </div>
+    </div>
+  
+    <!-- No Filter Results -->
+    <div *ngIf="isFiltering && filteredRecordsCount === 0 && leaveRecords.length > 0" class="no-filter-results">
+      <div class="empty-state">
+        <span class="empty-icon">🔍</span>
+        <p>No records found for selected date range</p>
+        <small>Try adjusting your filter criteria</small>
+      </div>
+    </div>
+  
+    <!-- Data Table -->
+    <div *ngIf="monthGroups.length > 0" class="table-container">
+      <div class="scrollable-table">
+        <div class="month-groups">
+          <div *ngFor="let group of monthGroups" class="month-group">
+            <!-- Month Header -->
+            <div class="month-header">
+              <div class="month-info" (click)="toggleMonth(group.monthYear)">
+                <span class="month-icon">📅</span>
+                <h3 class="month-title">{{ group.displayName }}</h3>
+                <span class="month-count">{{ group.totalDays }} day(s)</span>
+              </div>
+              
+              <div class="month-actions">
+                <button 
+                  class="btn-delete-month"
+                  (click)="deleteMonth(group)"
+                  title="Delete all records for this month">
+                  🗑️ Delete Month
+                </button>
+                <div class="expand-icon" 
+                     [class.expanded]="isMonthExpanded(group.monthYear)"
+                     (click)="toggleMonth(group.monthYear)">
+                  <span>{{ isMonthExpanded(group.monthYear) ? '▼' : '▶' }}</span>
+                </div>
+              </div>
+            </div>
+  
+            <!-- Month Records -->
+            <div class="month-content" [class.expanded]="isMonthExpanded(group.monthYear)">
+              <div class="table-wrapper">
+                <table class="table">
+                  <thead class="sticky-header">
+                    <tr>
+                      <th>👤 Employee</th>
+                      <th>📅 Date</th>
+                      <th>📋 Leave Type</th>
+                      <th>📊 Status</th>
+                      <th class="comment-header">💬 Comment</th>
+                      <th>⚙️ Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let record of group.records" 
+                        [ngClass]="{'cancelled': record.status === 'Cancelled'}">
+                      <td class="employee-cell">
+                        <span class="employee-name">{{ record.employeeName }}</span>
+                      </td>
+                      <td class="date-cell">
+                        <span class="date-display">{{ record.leaveDate | date:'EEE, MMM dd' }}</span>
+                      </td>
+                      <td class="leave-type-cell">
+                        <span class="leave-type-badge" 
+                              [ngClass]="getLeaveTypeClass(record.leaveType)">
+                          {{ record.leaveType || 'Annual Leave' }}
+                        </span>
+                      </td>
+                      <td class="status-cell">
+                        <span [ngClass]="'status-' + record.status.toLowerCase()">
+                          {{ record.status === 'Active' ? '✅' : '❌' }} {{ record.status }}
+                        </span>
+                      </td>
+                      <td class="comment-cell">
+                        <span class="comment-text" 
+                              [title]="record.comment"
+                              [class.no-comment]="!record.comment">
+                          {{ record.comment || '-' }}
+                        </span>
+                      </td>
+                      <td class="actions-cell">
+                        <div class="action-buttons">
+                          <button 
+                            *ngIf="record.status === 'Active'"
+                            (click)="cancelLeave(record.id)"
+                            class="btn-cancel"
+                            title="Cancel leave">
+                            ❌
+                          </button>
+                          <button 
+                            (click)="removeLeave(record.id)"
+                            class="btn-remove"
+                            title="Remove leave">
+                            🗑️
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Scroll Indicator -->
+    <div class="scroll-indicator" *ngIf="monthGroups.length > 0">
+      <small>💡 Scroll within the table to see more records</small>
+    </div>
+  </div>
